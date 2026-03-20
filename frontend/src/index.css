@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji";
+}
+
+html {
+  color-scheme: light;
+}
+
+body {
+  @apply min-h-screen bg-neutral-100 text-neutral-900 antialiased;
+}

@@ -1,0 +1,31 @@
+services:
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "22001:22001"
+    volumes:
+      - ./backend:/app
+      - ./.dejavu:/app/.dejavu
+    command: >
+      sh -c "mkdir -p .dejavu &&
+             uvicorn app.main:app --host 0.0.0.0 --port 22001 2>&1 | tee -a .dejavu/backend.log"
+
+  web:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "22000:22000"
+    volumes:
+      - ./frontend:/app
+      - ./.dejavu:/app/.dejavu
+    environment:
+      VITE_API_PROXY: http://api:22001
+    depends_on:
+      - api
+    command: >
+      sh -c "mkdir -p .dejavu &&
+             npm install &&
+             npm run dev -- --host 0.0.0.0 --port 22000 2>&1 | tee -a .dejavu/frontend.log"
