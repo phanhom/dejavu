@@ -11,7 +11,7 @@ class ConnectionStatus(str, Enum):
     connected = "connected"
 
 
-class ShrimpCreate(BaseModel):
+class NodeCreate(BaseModel):
     name: str = Field(..., min_length=1, max_length=128)
     gateway_url: str | None = Field(
         default=None,
@@ -20,7 +20,7 @@ class ShrimpCreate(BaseModel):
     )
 
 
-class ShrimpOut(BaseModel):
+class NodeOut(BaseModel):
     id: str
     name: str
     gateway_url: str | None

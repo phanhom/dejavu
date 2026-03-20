@@ -4,11 +4,11 @@ from typing import Annotated
 
 from fastapi import Depends
 
-from app.services.shrimp_store import ShrimpStore, shrimp_store
+from app.services.node_store import NodeStore, node_store
 
 
-def get_shrimp_store() -> ShrimpStore:
-    return shrimp_store
+def get_node_store() -> NodeStore:
+    return node_store
 
 
-ShrimpStoreDep = Annotated[ShrimpStore, Depends(get_shrimp_store)]
+NodeStoreDep = Annotated[NodeStore, Depends(get_node_store)]

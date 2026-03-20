@@ -6,45 +6,45 @@ from uuid import uuid4
 
 from fastapi import HTTPException
 
-from app.schemas.shrimp import ConnectionStatus, ShrimpCreate, ShrimpOut
+from app.schemas.node import ConnectionStatus, NodeCreate, NodeOut
 
 
 def _now_iso() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
-class ShrimpStore:
-    """进程内虾列表（后续可换持久化 / 外部状态）。"""
+class NodeStore:
+    """进程内已登记 OpenClaw 节点（后续可换持久化 / 外部状态）。"""
 
     def __init__(self) -> None:
         self._rows: dict[str, dict] = {}
         self._lock = Lock()
 
-    def list(self) -> list[ShrimpOut]:
+    def list(self) -> list[NodeOut]:
         with self._lock:
             rows = sorted(
                 self._rows.values(), key=lambda r: r["created_at"], reverse=True
             )
-        return [ShrimpOut(**r) for r in rows]
+        return [NodeOut(**r) for r in rows]
 
-    def create(self, body: ShrimpCreate) -> ShrimpOut:
-        sid = str(uuid4())
+    def create(self, body: NodeCreate) -> NodeOut:
+        nid = str(uuid4())
         row = {
-            "id": sid,
+            "id": nid,
             "name": body.name.strip(),
             "gateway_url": body.gateway_url.strip() if body.gateway_url else None,
             "connection_status": ConnectionStatus.disconnected,
             "created_at": _now_iso(),
         }
         with self._lock:
-            self._rows[sid] = row
-        return ShrimpOut(**row)
+            self._rows[nid] = row
+        return NodeOut(**row)
 
-    def delete(self, shrimp_id: str) -> None:
+    def delete(self, node_id: str) -> None:
         with self._lock:
-            if shrimp_id not in self._rows:
+            if node_id not in self._rows:
                 raise HTTPException(status_code=404, detail="not found")
-            del self._rows[shrimp_id]
+            del self._rows[node_id]
 
 
-shrimp_store = ShrimpStore()
+node_store = NodeStore()

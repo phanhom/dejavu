@@ -1,1 +1,1 @@
-"""逮虾户 FastAPI 应用包。"""
+"""逮龙虾户（delobjavu）FastAPI 应用包。"""

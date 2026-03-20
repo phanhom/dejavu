@@ -1,3 +1,3 @@
-from app.services.shrimp_store import ShrimpStore, shrimp_store
+from app.services.node_store import NodeStore, node_store
 
-__all__ = ["ShrimpStore", "shrimp_store"]
+__all__ = ["NodeStore", "node_store"]

@@ -7,10 +7,10 @@ services:
       - "22001:22001"
     volumes:
       - ./backend:/app
-      - ./.dejavu:/app/.dejavu
+      - ./.delobjavu:/app/.delobjavu
     command: >
-      sh -c "mkdir -p .dejavu &&
-             uvicorn app.main:app --host 0.0.0.0 --port 22001 2>&1 | tee -a .dejavu/backend.log"
+      sh -c "mkdir -p .delobjavu &&
+             uvicorn app.main:app --host 0.0.0.0 --port 22001 2>&1 | tee -a .delobjavu/backend.log"
 
   web:
     build:
@@ -20,12 +20,12 @@ services:
       - "22000:22000"
     volumes:
       - ./frontend:/app
-      - ./.dejavu:/app/.dejavu
+      - ./.delobjavu:/app/.delobjavu
     environment:
       VITE_API_PROXY: http://api:22001
     depends_on:
       - api
     command: >
-      sh -c "mkdir -p .dejavu &&
+      sh -c "mkdir -p .delobjavu &&
              npm install &&
-             npm run dev -- --host 0.0.0.0 --port 22000 2>&1 | tee -a .dejavu/frontend.log"
+             npm run dev -- --host 0.0.0.0 --port 22000 2>&1 | tee -a .delobjavu/frontend.log"

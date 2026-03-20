@@ -1,4 +1,4 @@
 from . import health
-from . import shrimp
+from . import node
 
-__all__ = ["health", "shrimp"]
+__all__ = ["health", "node"]

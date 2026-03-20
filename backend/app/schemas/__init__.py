@@ -1,3 +1,3 @@
-from app.schemas.shrimp import ConnectionStatus, ShrimpCreate, ShrimpOut
+from app.schemas.node import ConnectionStatus, NodeCreate, NodeOut
 
-__all__ = ["ConnectionStatus", "ShrimpCreate", "ShrimpOut"]
+__all__ = ["ConnectionStatus", "NodeCreate", "NodeOut"]

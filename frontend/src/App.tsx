@@ -1,15 +1,15 @@
 import { useCallback, useEffect, useState } from "react";
 import {
-  createShrimp,
-  deleteShrimp,
+  createNode,
+  deleteNode,
   fetchHealth,
-  listShrimp,
-  type Shrimp,
+  listNodes,
+  type OpenClawNode,
 } from "./api";
 
 type BackendState = "unknown" | "up" | "down";
 
-function statusLabel(s: Shrimp["connection_status"]) {
+function statusLabel(s: OpenClawNode["connection_status"]) {
   switch (s) {
     case "connected":
       return "已连接";
@@ -20,7 +20,7 @@ function statusLabel(s: Shrimp["connection_status"]) {
   }
 }
 
-function statusStyle(s: Shrimp["connection_status"]) {
+function statusStyle(s: OpenClawNode["connection_status"]) {
   switch (s) {
     case "connected":
       return "bg-neutral-900 text-white";
@@ -33,7 +33,7 @@ function statusStyle(s: Shrimp["connection_status"]) {
 
 export default function App() {
   const [backend, setBackend] = useState<BackendState>("unknown");
-  const [items, setItems] = useState<Shrimp[]>([]);
+  const [items, setItems] = useState<OpenClawNode[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [name, setName] = useState("");
@@ -48,7 +48,7 @@ export default function App() {
       setBackend("down");
     }
     try {
-      const list = await listShrimp();
+      const list = await listNodes();
       setItems(list);
     } catch {
       setItems([]);
@@ -68,7 +68,7 @@ export default function App() {
     setLoading(true);
     setError(null);
     try {
-      await createShrimp({
+      await createNode({
         name: name.trim(),
         gateway_url: gatewayUrl.trim() || null,
       });
@@ -86,7 +86,7 @@ export default function App() {
     setLoading(true);
     setError(null);
     try {
-      await deleteShrimp(id);
+      await deleteNode(id);
       await refresh();
     } catch {
       setError("删除失败");
@@ -99,13 +99,14 @@ export default function App() {
     <div className="mx-auto flex min-h-screen max-w-3xl flex-col px-4 py-10">
       <header className="mb-10 border-b border-neutral-300 pb-6">
         <p className="text-xs font-medium uppercase tracking-[0.2em] text-neutral-500">
-          dejavu
+          delobjavu
         </p>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight text-neutral-900">
-          逮虾户
+          逮龙虾户
         </h1>
         <p className="mt-2 max-w-xl text-sm leading-relaxed text-neutral-600">
-          登记局域网或远端的 OpenClaw 节点（虾）。当前仅保存列表与连接状态占位，联动后续再接。
+          登记局域网或远端的 OpenClaw Gateway
+          节点。当前仅保存列表与连接状态占位，与 Gateway 的联动后续再接。
         </p>
         <div className="mt-4 flex items-center gap-3 text-sm">
           <span className="text-neutral-500">后端</span>
@@ -135,7 +136,7 @@ export default function App() {
       </header>
 
       <section className="mb-10 rounded-lg border border-neutral-300 bg-white p-5 shadow-sm">
-        <h2 className="text-sm font-semibold text-neutral-900">添加虾</h2>
+        <h2 className="text-sm font-semibold text-neutral-900">添加节点</h2>
         <form onSubmit={onSubmit} className="mt-4 space-y-4">
           <div>
             <label
@@ -148,7 +149,7 @@ export default function App() {
               id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="例如：办公室节点 A"
+              placeholder="例如：办公室 OpenClaw 节点 A"
               className="mt-1 w-full rounded border border-neutral-300 bg-neutral-50 px-3 py-2 text-sm text-neutral-900 outline-none ring-neutral-900 placeholder:text-neutral-400 focus:border-neutral-900 focus:ring-1"
               autoComplete="off"
             />
@@ -184,12 +185,12 @@ export default function App() {
 
       <section>
         <div className="mb-3 flex items-baseline justify-between gap-4">
-          <h2 className="text-sm font-semibold text-neutral-900">虾列表</h2>
+          <h2 className="text-sm font-semibold text-neutral-900">节点列表</h2>
           <span className="text-xs text-neutral-500">{items.length} 条</span>
         </div>
         {items.length === 0 ? (
           <p className="rounded-lg border border-dashed border-neutral-300 bg-neutral-50 px-4 py-8 text-center text-sm text-neutral-500">
-            还没有虾。先确保后端在线，再添加一条。
+            还没有节点。先确保后端在线，再添加一条。
           </p>
         ) : (
           <ul className="divide-y divide-neutral-200 rounded-lg border border-neutral-300 bg-white">

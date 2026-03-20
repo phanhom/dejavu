@@ -3,7 +3,7 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$ROOT"
 
-mkdir -p .dejavu
+mkdir -p .delobjavu
 
 if [[ ! -d backend/.venv ]]; then
   python3 -m venv backend/.venv
@@ -18,8 +18,8 @@ fi
 
 trap 'kill $(jobs -p) 2>/dev/null || true' EXIT INT TERM
 
-# tee：终端可见 + 写入 .dejavu（与 docker logs 行为对齐思路）
-(cd backend && uvicorn app.main:app --reload --host 0.0.0.0 --port 22001 2>&1 | tee -a "$ROOT/.dejavu/backend.log") &
+# tee：终端可见 + 写入 .delobjavu（与 docker logs 行为对齐思路）
+(cd backend && uvicorn app.main:app --reload --host 0.0.0.0 --port 22001 2>&1 | tee -a "$ROOT/.delobjavu/backend.log") &
 sleep 0.5
-(cd frontend && npm run dev -- --host 127.0.0.1 --port 22000 2>&1 | tee -a "$ROOT/.dejavu/frontend.log") &
+(cd frontend && npm run dev -- --host 127.0.0.1 --port 22000 2>&1 | tee -a "$ROOT/.delobjavu/frontend.log") &
 wait

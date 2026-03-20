@@ -1,6 +1,7 @@
 export type ConnectionStatus = "disconnected" | "connecting" | "connected";
 
-export type Shrimp = {
+/** 已登记的 OpenClaw 侧节点（与浏览器 DOM Node 区分命名） */
+export type OpenClawNode = {
   id: string;
   name: string;
   gateway_url: string | null;
@@ -16,17 +17,17 @@ export async function fetchHealth(): Promise<{ status: string }> {
   return res.json();
 }
 
-export async function listShrimp(): Promise<Shrimp[]> {
-  const res = await api("/api/shrimp");
+export async function listNodes(): Promise<OpenClawNode[]> {
+  const res = await api("/api/nodes");
   if (!res.ok) throw new Error("list failed");
   return res.json();
 }
 
-export async function createShrimp(body: {
+export async function createNode(body: {
   name: string;
   gateway_url?: string | null;
-}): Promise<Shrimp> {
-  const res = await api("/api/shrimp", {
+}): Promise<OpenClawNode> {
+  const res = await api("/api/nodes", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -41,8 +42,8 @@ export async function createShrimp(body: {
   return res.json();
 }
 
-export async function deleteShrimp(id: string): Promise<void> {
-  const res = await api(`/api/shrimp/${encodeURIComponent(id)}`, {
+export async function deleteNode(id: string): Promise<void> {
+  const res = await api(`/api/nodes/${encodeURIComponent(id)}`, {
     method: "DELETE",
   });
   if (!res.ok) throw new Error("delete failed");
